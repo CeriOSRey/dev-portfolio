@@ -1,0 +1,37 @@
+{
+  "profile": {
+    "name": "First Last",
+    "title": "Software Engineer",
+    "bio": "Short professional summary.",
+    "avatarUrl": "",
+    "location": "City, Country"
+  },
+  "skills": [
+    { "category": "Frontend", "items": ["React", "Next.js", "TypeScript"] },
+    { "category": "Backend", "items": ["Node.js", "Express"] },
+    { "category": "Testing", "items": ["Playwright", "Jest"] }
+  ],
+  "experience": [
+    {
+      "role": "Software Engineer",
+      "company": "Company Name",
+      "startDate": "2022-01",
+      "endDate": "Present",
+      "highlights": ["Built X using Y.", "Improved Z by N%."]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Name",
+      "description": "Short description of the project.",
+      "techStack": ["React", "Node.js"],
+      "liveUrl": "https://example.com",
+      "sourceUrl": "https://github.com/user/repo"
+    }
+  ],
+  "contact": {
+    "email": "you@example.com",
+    "github": "https://github.com/username",
+    "linkedin": "https://linkedin.com/in/username"
+  }
+}

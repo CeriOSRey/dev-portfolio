@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+body {
+  @apply bg-soft text-gray-800 font-sans;
+}
+
+.container {
+  @apply max-w-6xl mx-auto;
+}
+
+.nav-link { @apply text-gray-600 hover:text-accent transition-colors; }
+.nav-link:hover { color: #10b981; }
+.nav-link::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, #1e3a8a, #10b981);
+  transition: width 200ms ease;
+}
+.nav-link:hover::after { width: 100%; }
+.nav-link.active { @apply text-primary; }
+.nav-link.active::after { width: 100%; }
+
+.section { @apply py-20 px-4 sm:px-8; scroll-margin-top: 80px; }
+.section h2 { @apply text-3xl font-extrabold mb-6 text-primary; }
+
+.card { @apply border rounded-xl p-5 shadow-sm transition-transform hover:shadow-soft hover:-translate-y-0.5 bg-white; }
+.badge { @apply inline-block bg-gray-100 text-gray-800 px-2.5 py-1 mr-2 mb-2 rounded-full text-sm; }
+
+.hero-name { @apply text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent; }
+.hero-title { @apply text-xl text-gray-600 mt-2; }
+.hero-bio { @apply mt-4 text-gray-700 leading-relaxed; }
+
+footer { @apply mt-16 py-8 text-sm text-center text-gray-500; }
+
+/* Section variants and divider */
+.section--alt { @apply bg-muted; }
+.divider { height: 1px; background: linear-gradient(90deg, rgba(30,58,138,0.15), rgba(16,185,129,0.15)); }
+
+/* Action link button style */
+.btn-link { @apply inline-block px-3 py-1 rounded-full border text-primary hover:bg-primary hover:text-white transition-colors; border-color: #1e3a8a20; }
