@@ -45,3 +45,5 @@ server/app.db
 # Misc
 *.swp
 *.swo
+.vercel
+.env*.local

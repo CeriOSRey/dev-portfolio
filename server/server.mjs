@@ -2,10 +2,10 @@ import express from 'express';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import cors from 'cors';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
+// const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -69,63 +69,63 @@ async function initDb() {
   await autoSeed();
 }
 
-function authMiddleware(req, res, next) {
-  const auth = req.headers.authorization || '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
-  if (!token) return res.status(401).json({ error: 'Unauthorized' });
-  try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    req.user = payload; // { id }
-    next();
-  } catch (e) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-}
+// function authMiddleware(req, res, next) {
+//   const auth = req.headers.authorization || '';
+//   const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+//   if (!token) return res.status(401).json({ error: 'Unauthorized' });
+//   try {
+//     const payload = jwt.verify(token, JWT_SECRET);
+//     req.user = payload; // { id }
+//     next();
+//   } catch (e) {
+//     return res.status(401).json({ error: 'Invalid token' });
+//   }
+// }
 
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ error: 'Missing email or password' });
-  const user = await db.get('SELECT * FROM users WHERE email = ?', email);
-  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-  const ok = await bcrypt.compare(password, user.password_hash);
-  if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
-  const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '2h' });
-  res.json({ token });
-});
+// app.post('/api/login', async (req, res) => {
+//   const { email, password } = req.body;
+//   if (!email || !password) return res.status(400).json({ error: 'Missing email or password' });
+//   const user = await db.get('SELECT * FROM users WHERE email = ?', email);
+//   if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+//   const ok = await bcrypt.compare(password, user.password_hash);
+//   if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
+//   const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '2h' });
+//   res.json({ token });
+// });
 
-app.get('/api/me', authMiddleware, async (req, res) => {
-  const id = req.user.id;
-  const user = await db.get('SELECT id, name, email FROM users WHERE id = ?', id);
-  const profile = await db.get('SELECT title, bio, avatarUrl, location FROM profiles WHERE user_id = ?', id);
-  const skillsRows = await db.all('SELECT category, item FROM skills WHERE user_id = ?', id);
-  const skills = Object.values(
-    skillsRows.reduce((acc, row) => {
-      if (!acc[row.category]) acc[row.category] = { category: row.category, items: [] };
-      acc[row.category].items.push(row.item);
-      return acc;
-    }, {})
-  );
-  const experienceRows = await db.all('SELECT role, company, startDate, endDate, highlight FROM experience WHERE user_id = ?', id);
-  const experience = [];
-  for (const row of experienceRows) {
-    let exp = experience.find(e => e.role === row.role && e.company === row.company && e.startDate === row.startDate && e.endDate === row.endDate);
-    if (!exp) {
-      exp = { role: row.role, company: row.company, startDate: row.startDate, endDate: row.endDate, highlights: [] };
-      experience.push(exp);
-    }
-    exp.highlights.push(row.highlight);
-  }
-  const projectRows = await db.all('SELECT name, description, tech, liveUrl, sourceUrl FROM projects WHERE user_id = ?', id);
-  const projects = projectRows.map(r => ({ name: r.name, description: r.description, techStack: r.tech.split(','), liveUrl: r.liveUrl, sourceUrl: r.sourceUrl }));
-  const contact = await db.get('SELECT email, github, linkedin FROM contacts WHERE user_id = ?', id);
-  res.json({
-    profile: { name: user.name, title: profile?.title, bio: profile?.bio, avatarUrl: profile?.avatarUrl, location: profile?.location },
-    skills,
-    experience,
-    projects,
-    contact,
-  });
-});
+// app.get('/api/me', authMiddleware, async (req, res) => {
+//   const id = req.user.id;
+//   const user = await db.get('SELECT id, name, email FROM users WHERE id = ?', id);
+//   const profile = await db.get('SELECT title, bio, avatarUrl, location FROM profiles WHERE user_id = ?', id);
+//   const skillsRows = await db.all('SELECT category, item FROM skills WHERE user_id = ?', id);
+//   const skills = Object.values(
+//     skillsRows.reduce((acc, row) => {
+//       if (!acc[row.category]) acc[row.category] = { category: row.category, items: [] };
+//       acc[row.category].items.push(row.item);
+//       return acc;
+//     }, {})
+//   );
+//   const experienceRows = await db.all('SELECT role, company, startDate, endDate, highlight FROM experience WHERE user_id = ?', id);
+//   const experience = [];
+//   for (const row of experienceRows) {
+//     let exp = experience.find(e => e.role === row.role && e.company === row.company && e.startDate === row.startDate && e.endDate === row.endDate);
+//     if (!exp) {
+//       exp = { role: row.role, company: row.company, startDate: row.startDate, endDate: row.endDate, highlights: [] };
+//       experience.push(exp);
+//     }
+//     exp.highlights.push(row.highlight);
+//   }
+//   const projectRows = await db.all('SELECT name, description, tech, liveUrl, sourceUrl FROM projects WHERE user_id = ?', id);
+//   const projects = projectRows.map(r => ({ name: r.name, description: r.description, techStack: r.tech.split(','), liveUrl: r.liveUrl, sourceUrl: r.sourceUrl }));
+//   const contact = await db.get('SELECT email, github, linkedin FROM contacts WHERE user_id = ?', id);
+//   res.json({
+//     profile: { name: user.name, title: profile?.title, bio: profile?.bio, avatarUrl: profile?.avatarUrl, location: profile?.location },
+//     skills,
+//     experience,
+//     projects,
+//     contact,
+//   });
+// });
 
 initDb().then(() => {
   app.listen(PORT, () => console.log(`Server listening on http://localhost:${PORT}`));

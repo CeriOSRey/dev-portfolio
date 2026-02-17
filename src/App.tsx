@@ -36,7 +36,8 @@ export default function App() {
       if (!token) return;
       if (isTokenExpired(token)) { logout(); navigate('/login'); return; }
       try {
-        const res = await fetch('http://127.0.0.1:3001/api/me', { headers: { Authorization: `Bearer ${token}` } });
+        const base = import.meta.env.VITE_API_BASE_URL ?? '';
+        const res = await fetch(`${base}/api/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (res.ok) {
           const json = await res.json();
           setData(json as Data);

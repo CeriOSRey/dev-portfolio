@@ -12,7 +12,8 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     try {
-      const res = await fetch('http://127.0.0.1:3001/api/login', {
+      const base = import.meta.env.VITE_API_BASE_URL ?? '';
+      const res = await fetch(`${base}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
