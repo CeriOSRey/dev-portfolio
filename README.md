@@ -1,6 +1,21 @@
+
 # Developer Portfolio & Projects Showcase (POC)
 
 Single-page React + Vite + Tailwind app showcasing a developer profile, skills, experience, projects, and contact info. Built for reliable Playwright automation with stable selectors.
+
+**Now deployed on Vercel:**
+
+[dev-portfolio-enm64mahv-reycerio-1987s-projects.vercel.app](https://dev-portfolio-enm64mahv-reycerio-1987s-projects.vercel.app/)
+
+---
+
+**Recent changes:**
+- Migrated backend API from Express server to [Next.js API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) (Vercel serverless functions in `/api`).
+- Removed the custom Express backend server; all authentication and profile APIs are now handled by serverless functions.
+- Simplified local development: no need to run a separate backend server.
+- Updated deployment to Vercel for seamless full-stack hosting.
+
+---
 
 ## Features
 - Sticky navbar with smooth-scrolling anchors (`About`, `Skills`, `Experience`, `Projects`, `Contact`)
@@ -20,46 +35,35 @@ Single-page React + Vite + Tailwind app showcasing a developer profile, skills, 
 npm install
 ```
 
+
 ### Quick Start
 
 ```powershell
 npm install
-npm run dev:all
-# Frontend: http://localhost:5173  | Backend: http://127.0.0.1:3001
+npm run dev
+# Open http://localhost:5173
 ```
+
 
 Demo login:
 
 - Alice: `alice@example.com` / `password123`
 - Bob: `bob@example.com` / `password123`
 
-The backend auto-seeds these users on first start; no manual setup needed.
+User data is now hardcoded in the API route for demo purposes. No database setup required.
 
-#### Change Backend Port
 
-If port `3001` is busy, override it via environment variable.
+---
 
-Windows PowerShell:
+## Architecture
 
-```powershell
-$env:PORT='3002'; npm run server
-# Or for combined dev:
-$env:PORT='3002'; npm run dev:all
-```
- 
-Notes:
+- **Frontend:** React + Vite + Tailwind CSS
+- **API:** Next.js API routes (TypeScript, serverless, in `/api`)
+- **Auth:** JWT-based, demo users only
+- **Deployment:** [Vercel](https://vercel.com/)
 
-- Frontend API calls target `http://127.0.0.1:<PORT>`; changing `PORT` adjusts backend only.
-- Ensure any running instance on `3001` is stopped before starting a new one.
 
-### Run Dev (manual split)
-
-```powershell
-npm run server
-# In a second terminal:
-npm run dev
-# Open http://localhost:5173
-```
+---
 
 ### Lint & Format
 
@@ -68,11 +72,13 @@ npm run lint
 npm run format
 ```
 
+
 ### Build + Preview
 
 ```powershell
 npm run build
 npm run preview
+# Open http://localhost:4173
 ```
 
 ### Run E2E Tests
@@ -88,11 +94,12 @@ npm run test:e2e
 - GitHub Actions workflow at `.github/workflows/ci.yml` runs `npm run lint` and Playwright E2E on push/PR to `main`.
 - Ensure your default branch is `main` or adjust the workflow trigger.
 
+
 ## Notes
 
-- Update content in `src/data.json`.
-- Backend server runs on `http://localhost:3001`. Set `JWT_SECRET` in env for production.
-- Add more projects by extending `projects` array.
+- Update user data in `/api/me.ts` for demo users.
+- Add more projects by extending the user objects in `/api/me.ts`.
 - Tailwind theme colors set in `tailwind.config.cjs`.
 
 Use the dropdown on `/login` to auto-fill demo credentials.
+

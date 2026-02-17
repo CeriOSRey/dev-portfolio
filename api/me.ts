@@ -27,7 +27,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Hardcoded user data for Alice and Bob
-  const users: Record<string, any> = {
+  type User = {
+    profile: {
+      name: string;
+      title: string;
+      bio: string;
+      avatarUrl: string;
+      location: string;
+    };
+    skills: { category: string; items: string[] }[];
+    experience: {
+      role: string;
+      company: string;
+      startDate: string;
+      endDate: string;
+      highlights: string[];
+    }[];
+    projects: {
+      name: string;
+      description: string;
+      techStack: string[];
+      liveUrl: string;
+      sourceUrl: string;
+    }[];
+    contact: {
+      email: string;
+      github: string;
+      linkedin: string;
+    };
+  };
+
+  const users: Record<string, User> = {
     'alice@example.com': {
       profile: {
         name: 'Alice Example',
