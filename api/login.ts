@@ -1,8 +1,33 @@
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getUser } from './userData';
+
+declare global {
+  var registeredUsers: Record<string, any>;
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
+
+// Shared user storage (in-memory, resets on deployment)
+const users: Record<string, { email: string; password: string }> = {
+  'alice@example.com': {
+    email: 'alice@example.com',
+    password: 'password123'
+  },
+  'bob@example.com': {
+    email: 'bob@example.com',
+    password: 'password123'
+  }
+};
+
+// Global variable to persist new users across function calls
+// Note: This will reset on Vercel cold starts
+if (!global.registeredUsers) {
+  global.registeredUsers = {};
+}
+
+function getUser(email: string) {
+  return users[email] || global.registeredUsers[email] || null;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
