@@ -7,5 +7,8 @@
     "api/*.ts": {
       "runtime": "nodejs20.x"
     }
-  }
+  },
+  "builds": [
+    { "src": "server/**/*.ts", "use": "@vercel/node" }
+  ]
 }
