@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getUser } from './userData';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret';
 
@@ -15,13 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const validUsers: Record<string, string> = {
-    'alice@example.com': 'password123',
-    'bob@example.com': 'password123',
-  };
-
-  const ok = validUsers[email] && validUsers[email] === password;
-  if (!ok) {
+  const user = getUser(email);
+  if (!user || user.password !== password) {
     res.status(401).json({ error: 'Invalid credentials' });
     return;
   }

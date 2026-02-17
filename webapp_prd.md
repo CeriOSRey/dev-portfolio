@@ -5,8 +5,8 @@ Here’s a clean spec you can drop into another prompt to recreate a similar POC
 ## 1. Overview
 
 **App name:** Developer Portfolio & Projects Showcase  
-**Purpose:** Single-page web app to present a developer’s profile, skills, experience, and projects, with smooth navigation and clear sections for UI automation demos (Playwright).  
-**Scope:** Read-only content (no auth, no forms) with structured sections and stable selectors for automated tests.
+**Purpose:** Single-page web app to present a developer's profile, skills, experience, and projects, with smooth navigation and clear sections for UI automation demos (Playwright). Includes user authentication and profile creation capabilities.  
+**Scope:** Dynamic content with user registration, authentication, and personalized profiles. Users can sign up and create their own portfolios.
 
 ---
 
@@ -198,18 +198,21 @@ You can adjust framework names in your prompt to match your preferred stack.
   - Project cards: `data-testid="project-card"` with `data-project-name="<Name>"`.
 
 ### 7.3 Backend
-- Stack: Express 4 + SQLite (`sqlite`, `sqlite3`), JWT (`jsonwebtoken`), password hashing (`bcryptjs`), CORS (`cors`).
+- Stack: Next.js API routes (serverless functions) deployed on Vercel, JWT (`jsonwebtoken`) for authentication.
 - Endpoints:
   - `POST /api/login` → returns JWT on valid credentials.
+  - `POST /api/signup` → creates new user account with profile data and returns JWT.
   - `GET /api/me` → returns user-specific profile data (requires `Authorization: Bearer <token>`).
-- SQLite schema initialized on server start; seed script populates demo users and related entities.
-- CORS relaxed for dev; frontend calls `http://127.0.0.1:3001` to avoid IPv6 localhost issues.
+- Data storage: In-memory object store for demo purposes (resets on deployment).
+- Authentication: JWT-based with 2-hour expiration.
 
-### 7.4 Demo Data
-- Seeded users:
-  - Alice: `alice@example.com` / `password123`, avatar: `/images/alice.svg`.
-  - Bob: `bob@example.com` / `password123`, avatar: `/images/bob.svg`.
-- Profiles include `name`, `title`, `bio`, `avatarUrl`, `location`, plus skills, experience, projects, and contact links.
+### 7.4 Demo Data & User Management
+- Pre-seeded users:
+  - Alice: `alice@example.com` / `password123`
+  - Bob: `bob@example.com` / `password123`
+- User signup: New users can register with email, password, and complete profile information.
+- Profile data: Each user has personalized `name`, `title`, `bio`, `location`, plus skills, experience, projects, and contact links.
+- Storage: In-memory storage managed by `/api/userData.ts` module.
 
 ### 7.5 Testing
 - Playwright E2E tests cover nav anchors, content rendering, and login/route guard.
@@ -222,19 +225,22 @@ You can adjust framework names in your prompt to match your preferred stack.
 
 ### 7.7 Runbook
 - Install deps: `npm install`
-- Seed database: `npm run seed`
-- Run both client and server: `npm run dev:all`
-- Run backend only: `npm run server`
+- Run development server: `npm run dev`
+- Deploy to Vercel: `git push` (auto-deployment configured)
 - Run E2E tests: `npm run test:e2e`
 - Lint: `npm run lint` | Format: `npm run format`
 
-### 7.8 Environment & Ports
-- Backend: `http://127.0.0.1:3001`.
-- Frontend: Vite on `5173` (falls back to `5174` if busy).
+### 7.8 Environment & Deployment
+- Frontend: Vite on `5173` (falls back to `5174` if busy) in development.
+- API: Next.js serverless functions deployed on Vercel.
+- Production: [dev-portfolio-enm64mahv-reycerio-1987s-projects.vercel.app](https://dev-portfolio-enm64mahv-reycerio-1987s-projects.vercel.app/)
+- Authentication: JWT-based with client-side token storage.
 - Playwright uses a dynamic base URL; tests avoid URL hash mutations for stability.
 
-### 7.9 Non-Goals / Pending
-- No deployment configured yet (e.g., Vercel/Azure).
-- No file upload flow for avatars; using SVG placeholders.
-- Optional future: E2E tests against live backend (currently mocked for reliability).
+### 7.9 Recent Updates (2026-02-17)
+- **Architecture migration**: Moved from Express + SQLite to Next.js API routes (serverless).
+- **User registration**: Added signup functionality with profile creation form.
+- **Vercel deployment**: Full-stack deployment with auto-scaling serverless functions.
+- **Simplified development**: No separate backend server needed; single `npm run dev` command.
+- **In-memory storage**: Replaced database with in-memory user storage for demo purposes.
 

@@ -20,7 +20,8 @@ Single-page React + Vite + Tailwind app showcasing a developer profile, skills, 
 ## Features
 - Sticky navbar with smooth-scrolling anchors (`About`, `Skills`, `Experience`, `Projects`, `Contact`)
 - Responsive sections with Tailwind CSS
-- Static JSON data (`src/data.json`)
+- User authentication (login/signup) with JWT tokens
+- Dynamic profile creation and display
 - Stable `data-testid` attributes for E2E tests
 - Playwright tests for nav scroll, project cards, links
 
@@ -49,6 +50,7 @@ Demo login:
 
 - Alice: `alice@example.com` / `password123`
 - Bob: `bob@example.com` / `password123`
+- Or create a new account via the "Sign Up" tab
 
 User data is now hardcoded in the API route for demo purposes. No database setup required.
 
@@ -97,9 +99,9 @@ npm run test:e2e
 
 ## Notes
 
-- Update user data in `/api/me.ts` for demo users.
-- Add more projects by extending the user objects in `/api/me.ts`.
+- Create new users via the signup form or update existing user data in `/api/userData.ts`.
+- Add more projects by extending the user objects in `/api/userData.ts`.
 - Tailwind theme colors set in `tailwind.config.cjs`.
 
-Use the dropdown on `/login` to auto-fill demo credentials.
+Use the dropdown on `/login` to auto-fill demo credentials, or try the "Sign Up" tab to create a new account.
 
