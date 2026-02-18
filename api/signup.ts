@@ -199,8 +199,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Save user
   addUser(newUser);
 
-  // Generate JWT token
-  const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '2h' });
+  // Generate JWT token with full profile payload so /api/me can return it immediately
+  const tokenPayload = {
+    email,
+    profile: newUser.profile,
+    skills: newUser.skills,
+    experience: newUser.experience,
+    projects: newUser.projects,
+    contact: newUser.contact
+  };
+
+  const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '2h' });
 
   res.status(201).json({ token, message: 'User created successfully' });
 }

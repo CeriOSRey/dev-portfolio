@@ -150,21 +150,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  let email = null;
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { email?: string };
-    email = decoded.email;
-  } catch {
-    res.status(401).json({ error: 'Invalid token' });
-    return;
-  }
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-  if (email) {
-    const userProfile = getUserProfile(email);
-    if (userProfile) {
-      res.status(200).json(userProfile);
+    // If the token already contains the full profile (signup/login include it), return that directly
+    if (decoded && decoded.profile) {
+      const response = {
+        profile: decoded.profile,
+        skills: decoded.skills || [],
+        experience: decoded.experience || [],
+        projects: decoded.projects || [],
+        contact: decoded.contact || { email: decoded.email || '' }
+      };
+      res.status(200).json(response);
       return;
     }
+
+    const email = decoded?.email;
+    if (email) {
+      const userProfile = getUserProfile(email);
+      if (userProfile) {
+        res.status(200).json(userProfile);
+        return;
+      }
+    }
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid token' });
+    return;
   }
 
   // Default fallback profile
